@@ -1,0 +1,28 @@
+{
+    "name": "at_server/server_new",
+    "description": "server",
+    "license": "MIT",
+    "type": "library",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "秋枫",
+            "email": "1018594717@qq.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "symfony/console": "@stable",
+        "hassankhan/config": "1.1.0"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "AtServer\\": "src/",
+            "Library\\": "application/Library"
+        },
+        "files": [
+            "src/server/common/function.php"
+        ]
+    }
+}

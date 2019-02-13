@@ -1,0 +1,8 @@
+/application
+.idea/
+/bin
+/conf
+/public
+/vendor
+composer.lock
+
