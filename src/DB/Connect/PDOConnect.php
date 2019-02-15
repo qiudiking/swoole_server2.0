@@ -91,7 +91,7 @@ class PDOConnect {
 			$user     = getArrVal( 'user', $config, 'root' );
 			$port     = getArrVal( 'port', $config, '3306' );
 			$password = getArrVal( 'password', $config, '123456' );
-			$dbName   = getArrVal( 'db_name', $config, 'test' );
+			$dbName   = getArrVal( 'db_name', $config, 'mysql' );
 			$prefix   = getArrVal( 'prefix', $config );
 			$timeout  = getArrVal( 'timeout', $config );
 			$charset  = getArrVal( 'charset', $config );

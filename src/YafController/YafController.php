@@ -12,6 +12,8 @@ namespace AtServer\YafController;
 
 use AtServer\Client\Result;
 use AtServer\CoroutineClient\CoroutineContent;
+use AtServer\Exception\ThrowException;
+use AtServer\server\HttpServer;
 use AtServer\Sign\Sign;
 
 class YafController extends \Yaf\Controller_Abstract
@@ -96,6 +98,28 @@ class YafController extends \Yaf\Controller_Abstract
 			\AtServer\Client\Client::instance()->invokeAsyncResponse($params);
 		}
 
+	}
+
+	/**
+	 * 异步投递任务
+	 * @param $method
+	 * @param $data
+	 */
+	protected function asyncTask()
+	{
+		$params = func_get_args();
+		if( $params ){
+			$params['action'] = $params[0];
+			unset( $params[0] );
+			$server = HttpServer::$serverInstance;
+			if( $server instanceof \swoole_server ){
+				$server->task( serialize($params) );
+			}else{
+				ThrowException::SystemException(77732,'Task异步任务投递失败');
+			}
+		}else{
+			ThrowException::SystemException( 884767,'最少有一个参数' );
+		}
 	}
 
 	/**

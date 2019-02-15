@@ -49,11 +49,11 @@ class MysqlFactoryBuilder {
 		$str
 			= "<?php
 
-namespace Factory;
+namespace Library\\Factory;
 
-use AtServer\\EntityFactoryBase;
-use AtServer\\DBException;
-use AtServer\\ErrorHandler;
+use AtServer\\DB\\EntityFactoryBase;
+use AtServer\\Exception\\DBException;
+use AtServer\\Exception\\ErrorHandler;
 class {$saveClassName} extends EntityFactoryBase {
 ";
 
@@ -64,11 +64,11 @@ class {$saveClassName} extends EntityFactoryBase {
 			           .= "   /**
 	* @param mixed \$id
 	* @param bool \$is_instance 是否单例,默认false
-	* @return \\Entity\\{$_db_nameSpace}\\{$className}
-	* @throws \\AtServer\\DBException
+	* @return \\Library\\Entity\\{$_db_nameSpace}\\{$className}
+	* @throws \\AtServer\\Exception\\DBException
 	*/
 	public static function {$className}(\$id=null,\$is_instance=false){
-		\$instance=parent::instance(\\Entity\\{$_db_nameSpace}\\{$className}::class,\$id,\$is_instance);
+		\$instance=parent::instance(\\Library\\Entity\\{$_db_nameSpace}\\{$className}::class,\$id,\$is_instance);
 		if(!\$instance){
 			throw new DBException(ErrorHandler::GET_CONTROL_INSTANCE_EXCEPTION,'\\Entity\\{$_db_nameSpace}\\{$className} 生成实例失败');
 		}

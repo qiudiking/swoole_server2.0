@@ -61,7 +61,7 @@ class MysqlEntityBuilder {
 
 		$field = $m->PDO->getFields();
 		if($field){
-			$nameSpace = 'Entity\\'.self::getClassName($dbName);
+			$nameSpace = 'Library\\Entity\\'.self::getClassName($dbName);
 			$className = $prefix.self::getClassName( $tableName ).$postfix;
 			$nameSpaceClass='\\'.$nameSpace.'\\'.$className;
 			$_persist_property = '';
@@ -72,7 +72,7 @@ class MysqlEntityBuilder {
 			$str="<?php
 namespace {$nameSpace};
 
-use AtServer\\MysqlEntity;
+use AtServer\\DB\\MysqlEntity;
 
 class {$className} extends MysqlEntity {
 	public function __construct( \$id = null ) {

@@ -9,7 +9,6 @@
 namespace AtServer\DB;
 
 use AtServer\DocParse\ClassDocInfo;
-use AtServer\Mongodb\MongodbEntity;
 use AtServer\Exception\ErrorHandler;
 use AtServer\Exception\VerifyException;
 use AtServer\Exception\ThrowException;
@@ -85,12 +84,12 @@ class MysqlContainer implements \SplSubject {
 	/**
 	 * 保存实体对象到数据库
 	 * 参数Data 要保存的数据数组，并且要包含主键，主键成为保存的条件，如果为空，则是取实体数据
+	 *
 	 * @param array $data
 	 *
 	 * @return bool|int|mixed
+	 * @throws \AtServer\Exception\DBException
 	 * @throws \ReflectionException
-	 * @throws \AtServer\DBException
-	 * @throws \AtServer\FieldVerifyException
 	 */
 	function save(array $data=[]) {
 		//获取实体属性数据
@@ -134,6 +133,7 @@ class MysqlContainer implements \SplSubject {
 	}
 
 	/**
+	 *
 	 * 校验检测
 	 * <pre>
 	 * 单个：{"rule":"min","val":20,"error":"错误提示信息，没有则是默认"}
@@ -161,8 +161,9 @@ class MysqlContainer implements \SplSubject {
 	 * @param array  $data     被检验的数据
 	 * @param array  $filedDoc 字体小注解doc
 	 *
+	 *
 	 * @return bool
-	 * @throws \AtServer\VerifyException
+	 * @throws \AtServer\Exception\VerifyException
 	 */
 	public function chkVerify( $field, $rule, &$data, $filedDoc ) {
 
@@ -191,12 +192,11 @@ class MysqlContainer implements \SplSubject {
 
 	/**
 	 * 校验的字段数据类型
-	 *
 	 * @param $filedVal
 	 * @param $filedDes
 	 *
 	 * @return bool
-	 * @throws \AtServer\VerifyException
+	 * @throws \AtServer\Exception\VerifyException
 	 */
 	public function chkVerifyDataType( $filedVal, $filedDes ) {
 		if ( is_string( $filedVal ) || is_numeric( $filedVal ) ) {
@@ -208,9 +208,8 @@ class MysqlContainer implements \SplSubject {
 
 	/**
 	 * 获取实体类的校验规则
-	 *
 	 * @return array
-	 * @throws \AtServer\VerifyException
+	 * @throws \AtServer\Exception\VerifyException
 	 */
 	public function getVerifyRule() {
 		//$cacheKey = md5( APP_PATH . $this->_entity->getDBName() . $this->_entity->getTableName() );
@@ -369,9 +368,7 @@ class MysqlContainer implements \SplSubject {
 	}
 
 	/**
-	 * @param \AtServer\MysqlEntity $mysqlEntity
-	 *
-	 * @throws \AtServer\DBException
+	 * @param \AtServer\DB\MysqlEntity $mysqlEntity
 	 */
 	function setEntity( MysqlEntity $mysqlEntity ) {
 		$this->_entity = $mysqlEntity;
@@ -379,9 +376,8 @@ class MysqlContainer implements \SplSubject {
 	}
 
 	/**
-	 * 获取模型
-	 *
-	 * @return \AtServer\BaseM
+	 * @return \AtServer\DB\BaseM
+	 * @throws \AtServer\Exception\DBException
 	 */
 	function getModel() {
 		$this->model->setDBName( $this->_entity->getDBName() );
@@ -392,10 +388,9 @@ class MysqlContainer implements \SplSubject {
 	}
 
 	/**
-	 * @param \AtServer\MysqlEntity $mysqlEntity
+	 * @param \AtServer\DB\MysqlEntity $mysqlEntity
 	 *
-	 * @return null|\AtServer\MysqlContainer
-	 * @throws \AtServer\DBException
+	 * @return \AtServer\DB\MysqlContainer|null
 	 */
 	static function instance( MysqlEntity $mysqlEntity ) {
 

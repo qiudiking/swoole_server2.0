@@ -3,7 +3,6 @@
 namespace AtServer\DB;
 
 
-use AtServer\Mongodb\MongodbEntity;
 use AtServer\Log\Log;
 
 /**
@@ -52,8 +51,7 @@ class MysqlEntity extends Entity {
 	}
 
 	/**
-	 * @return \AtServer\Mongodb\Container|null|\AtServer\MysqlContainer
-	 * @throws \AtServer\DBException
+	 * @return \AtServer\DB\MysqlContainer|\DB\Mongodb\Container|null
 	 */
 	function getContainer() {
 		if ( is_null( $this->_container ) ) {

@@ -19,7 +19,9 @@
     "autoload": {
         "psr-4": {
             "AtServer\\": "src/",
-            "Library\\": "application/Library"
+            "Library\\": "application/Library",
+            "Tcp\\": "TCP/Library",
+            "App\\": "TCP/App"
         },
         "files": [
             "src/server/common/function.php"

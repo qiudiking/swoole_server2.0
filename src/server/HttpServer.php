@@ -184,6 +184,7 @@ class HttpServer extends SwooleServer {
 		$data = unserialize( $data );
 		if(isset($data['action'])){
 			list( $class, $method ) = explode( '::', $data['action'] );
+			unset( $data['action'] );
 			try{
 				if($class && $method ){
 					if(class_exists($class)){
