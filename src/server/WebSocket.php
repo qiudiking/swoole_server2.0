@@ -197,6 +197,8 @@ class WebSocket extends HttpServer
 				}
 			}
 			ConnceInfo::del( $fd );
+		}else{
+			Log::log('HTTP服务连接断开');
 		}
 	}
 

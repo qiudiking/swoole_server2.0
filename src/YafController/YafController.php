@@ -20,7 +20,7 @@ class YafController extends \Yaf\Controller_Abstract
 {
 
 	/**
-	 * @var
+	 * @var \AtServer\Client\Result
 	 */
 	protected $result;
 	
