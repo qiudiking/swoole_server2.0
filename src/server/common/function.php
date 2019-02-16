@@ -53,7 +53,7 @@ function checkExtension()
 
 
 function getConfigPath(){
-	$path = AT .'/conf';
+	$path = APPLICATION_PATH .'/conf';
 	if(!is_dir($path)){
 		mkdir($path,0755);
 	}

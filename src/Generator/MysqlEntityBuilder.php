@@ -9,6 +9,7 @@ namespace AtServer\Generator;
 
 use AtServer\DB\BaseM;
 use AtServer\DocParse\ClassDocInfo;
+use Noodlehaus\Config;
 
 class MysqlEntityBuilder {
 	/**
@@ -73,12 +74,18 @@ class MysqlEntityBuilder {
 namespace {$nameSpace};
 
 use AtServer\\DB\\MysqlEntity;
-
+use Noodlehaus\\Config;
 class {$className} extends MysqlEntity {
 	public function __construct( \$id = null ) {
 		\$this->_tableName = '{$tableName}';
-		\$this->_dbName = '{$dbName}';
-		parent::__construct( \$id );
+		";
+			if(isset(Config::load(getConfigPath())['mysql']['dbs'])){
+				$str .= "\$this->_dbName = '{$dbName}';";
+			}else{
+				$str .= "\$this->_dbName =Config::load( getConfigPath() )['mysql']['db_name'];";
+			}
+
+			$str .="parent::__construct( \$id );
 	}
 			";
 			foreach ( $field as $key => $value ) {

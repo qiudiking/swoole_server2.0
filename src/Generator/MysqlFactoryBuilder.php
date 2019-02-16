@@ -9,6 +9,7 @@
 namespace AtServer\Generator;
 
 use AtServer\DB\BaseM;
+use Noodlehaus\Config;
 
 /**
  * Class MysqlFactoryBuilder
@@ -37,8 +38,11 @@ class MysqlFactoryBuilder {
 	 * 创建文件
 	 */
 	public static function createFile( $dbName, $_classFiles, $savePath = '' ) {
-
-		$saveClassName = self::getClassName( $dbName ) . 'EntityFactory';
+		if( isset(Config::load(getConfigPath())['mysql']['dbs'] )){
+			$saveClassName = self::getClassName( $dbName ) . 'EntityFactory';
+		}else{
+			$saveClassName = 'DBEntityFactory';
+		}
 		$savePath || $savePath = MANAGE_PATH . '/Factory/';
 		create( $savePath );
 		$saveClassFile = $savePath . $saveClassName . '.php';

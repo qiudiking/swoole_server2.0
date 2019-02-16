@@ -218,7 +218,7 @@ class HttpServer extends SwooleServer {
 	 */
 	public function onWorkerStart( $server, $worker_id)
 	{
-		$this->app = new \Yaf\Application( AT . "/conf/application.ini" );
+		$this->app = new \Yaf\Application( APPLICATION_PATH . "/conf/application.ini" );
 		$objSamplePlugin = new \SamplePlugin();
 		$this->app->getDispatcher()->registerPlugin( $objSamplePlugin );
 		if(!$server->taskworker){
