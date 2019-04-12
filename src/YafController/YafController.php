@@ -26,21 +26,14 @@ class YafController extends \Yaf\Controller_Abstract
 
 	protected $result;
 	
-	protected $sign = false;
-
-	private function result()
-	{
-		$this->result = Result::Instance();
-	}
+	protected $sign = true;
 
 	/**
 	 * @throws \AtServer\Exception\SignException
 	 */
 	protected function init()
 	{
-		if(isAjaxRequest()){
-		    $this->result();
-		}
+		$this->result = Result::Instance();
 		if($this->sign){
 			Sign::Sign();
 		}
