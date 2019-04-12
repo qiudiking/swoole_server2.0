@@ -14,8 +14,10 @@ namespace AtServer\server;
 use AtServer\Client\sendMessage;
 use AtServer\Client\WsMessageBase;
 use AtServer\CoroutineClient\CoroutineContent;
+use AtServer\Http\Request;
 use AtServer\Log\Log;
 use AtServer\Client\Result;
+use Noodlehaus\Config;
 use Swoole\Coroutine;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -83,6 +85,7 @@ class HttpServer extends SwooleServer {
 	 */
 	public function onRequest(\Swoole\Http\Request $request ,\swoole_http_response $response)
 	{
+		Request::init();
 		$_SERVER             = isset( $request->server ) ? $request->server : array();
 		$header              = isset( $request->header ) ? $request->header : array();
 		foreach ( $_SERVER as $key => $value ) {
@@ -121,7 +124,9 @@ class HttpServer extends SwooleServer {
 		$response->header( 'Content-Type', 'text/html; charset=utf-8' );
 		$result_i = Result::Instance();
 		try {
-			$this->server->taskworker || $GLOBALS['HTTP_RAW_POST_DATA'] = $request->rawContent();
+			\Yaf\Dispatcher::getInstance()->autoRender(Config::load(getConfigPath())->get('common.autoRender',false));//自动渲染View
+			\Yaf\Dispatcher::getInstance();
+			$GLOBALS['HTTP_RAW_POST_DATA'] = $request->rawContent();
 			$requestObj                    = new \Yaf\Request\Http( $_SERVER['REQUEST_URI'] );
 			$this->app->bootstrap();
 			$this->app->getDispatcher()->dispatch( $requestObj );

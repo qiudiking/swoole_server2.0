@@ -79,4 +79,14 @@ class Response
 		$this->response->status( $code );
 	}
 
+	/**
+	 * 发送文件给浏览器
+	 * @param $fileName
+	 */
+	public function sendFile( $fileName )
+	{
+		CoroutineContent::put('IS_RESPONSE',1);
+		return $this->response->sendfile( $fileName );
+	}
+
 }

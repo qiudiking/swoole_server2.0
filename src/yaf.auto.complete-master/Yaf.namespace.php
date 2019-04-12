@@ -892,7 +892,7 @@ namespace Yaf
          *
          * @return Request_Abstract
          */
-	    private function getRequest(){}
+	    public function getRequest(){}
 
         /**
          * (Yaf >= 2.2.9) 

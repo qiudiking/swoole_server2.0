@@ -13,6 +13,7 @@ namespace AtServer\YafController;
 use AtServer\Client\Result;
 use AtServer\CoroutineClient\CoroutineContent;
 use AtServer\Exception\ThrowException;
+use AtServer\Http\Request;
 use AtServer\server\HttpServer;
 use AtServer\Sign\Sign;
 

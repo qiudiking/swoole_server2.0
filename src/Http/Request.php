@@ -12,6 +12,7 @@ namespace AtServer\Http;
 use AtServer\CoroutineClient\CoroutineContent;
 use AtServer\Log\Log;
 use Noodlehaus\Config;
+use Yaf\Loader;
 
 class Request
 {
@@ -36,15 +37,8 @@ class Request
 	 */
 	protected $baseUrl;
 
-	/**
-	 * @var string 当前执行的文件
-	 */
-	protected $baseFile;
 
-	/**
-	 * @var string 访问的ROOT地址
-	 */
-	protected $root;
+
 
 	/**
 	 * @var string pathinfo
@@ -55,26 +49,6 @@ class Request
 	 * @var string pathinfo（不含后缀）
 	 */
 	protected $path;
-
-	/**
-	 * @var array 当前路由信息
-	 */
-	protected $routeInfo = [];
-
-	/**
-	 * @var array 环境变量
-	 */
-	protected $env;
-
-	/**
-	 * @var array 当前调度信息
-	 */
-	protected $dispatch = [];
-	protected $module;
-	protected $controller;
-	protected $action;
-	// 当前语言集
-	protected $langset;
 
 	/**
 	 * @var array 请求参数
@@ -113,16 +87,12 @@ class Request
 
 	// 全局过滤规则
 	protected $filter;
-	// Hook扩展方法
-	protected static $hook = [];
+
 	// 绑定的属性
 	protected $bind = [];
 	// php://input
 	protected $input;
-	// 请求缓存
-	protected $cache;
-	// 缓存是否检查
-	protected $isCheckCache;
+
 
 	/**
 	 * 构造函数
@@ -133,19 +103,26 @@ class Request
 		$this->input = $GLOBALS['HTTP_RAW_POST_DATA'];
 	}
 
-
-
 	/**
 	 * 初始化
-	 *
 	 * @param array $options
 	 *
 	 * @return \AtServer\Http\Request|object
 	 */
 	public static function instance($options = [])
 	{
-		self::$instance = new static($options);
+		if (is_null(self::$instance)) {
+			self::$instance = new static($options);
+		}
 		return self::$instance;
+	}
+
+	/**
+	 * 清理Request实例
+	 */
+	public static function init()
+	{
+		self::$instance = null;
 	}
 
 
@@ -480,7 +457,7 @@ class Request
 			$data = is_array($file) ? array_merge($this->param, $file) : $this->param;
 			return $this->input($data, '', $default, $filter);
 		}
-		return $this->input($this->param, $name, $default, $filter);
+			return $this->input($this->param, $name, $default, $filter);
 	}
 
 	/**
@@ -597,24 +574,6 @@ class Request
 		return $this->put($name, $default, $filter);
 	}
 
-	/**
-	 * 获取request变量
-	 * @param string        $name 数据名称
-	 * @param string        $default 默认值
-	 * @param string|array  $filter 过滤方法
-	 * @return mixed
-	 */
-	public function request($name = '', $default = null, $filter = '')
-	{
-		if (empty($this->request)) {
-			$this->request = $_REQUEST;
-		}
-		if (is_array($name)) {
-			$this->param          = [];
-			return $this->request = array_merge($this->request, $name);
-		}
-		return $this->input($this->request, $name, $default, $filter);
-	}
 
 
 
@@ -1078,8 +1037,7 @@ class Request
 			return $ip[$type];
 		}
 		$config = Config::load(getConfigPath());
-		$httpAgentIp = $config->get('http_agent_ip');
-
+		$httpAgentIp = $config->get('http_server.http_agent_ip');
 		if ($httpAgentIp && isset($_SERVER[$httpAgentIp])) {
 			$ip = $_SERVER[$httpAgentIp];
 		} elseif ($adv) {
@@ -1103,6 +1061,8 @@ class Request
 		$ip   = $long ? [$ip, $long] : ['0.0.0.0', 0];
 		return $ip[$type];
 	}
+
+
 
 	/**
 	 * 检测是否使用手机访问
@@ -1168,7 +1128,7 @@ class Request
 	 */
 	public function port()
 	{
-		return $this->server('SERVER_PORT');
+		return $this->server('X-SERVER_PORT');
 	}
 
 	/**
@@ -1210,34 +1170,6 @@ class Request
 		return '';
 	}
 
-	/**
-	 * 获取当前请求的路由信息
-	 * @access public
-	 * @param array $route 路由名称
-	 * @return array
-	 */
-	public function routeInfo($route = [])
-	{
-		if (!empty($route)) {
-			$this->routeInfo = $route;
-		} else {
-			return $this->routeInfo;
-		}
-	}
-
-	/**
-	 * 设置或者获取当前请求的调度信息
-	 * @access public
-	 * @param array  $dispatch 调度信息
-	 * @return array
-	 */
-	public function dispatch($dispatch = null)
-	{
-		if (!is_null($dispatch)) {
-			$this->dispatch = $dispatch;
-		}
-		return $this->dispatch;
-	}
 
 	/**
 	 * 设置或者获取当前的模块名
@@ -1245,14 +1177,9 @@ class Request
 	 * @param string $module 模块名
 	 * @return string|Request
 	 */
-	public function module($module = null)
+	public function module()
 	{
-		if (!is_null($module)) {
-			$this->module = $module;
-			return $this;
-		} else {
-			return $this->module ?: '';
-		}
+		return \Yaf\Dispatcher::getInstance()->getRequest()->getModuleName();
 	}
 
 	/**
@@ -1261,14 +1188,9 @@ class Request
 	 * @param string $controller 控制器名
 	 * @return string|Request
 	 */
-	public function controller($controller = null)
+	public function controller( )
 	{
-		if (!is_null($controller)) {
-			$this->controller = $controller;
-			return $this;
-		} else {
-			return $this->controller ?: '';
-		}
+		return \Yaf\Dispatcher::getInstance()->getRequest()->getControllerName();
 	}
 
 	/**
@@ -1279,29 +1201,7 @@ class Request
 	 */
 	public function action($action = null)
 	{
-		if (!is_null($action) && !is_bool($action)) {
-			$this->action = $action;
-			return $this;
-		} else {
-			$name = $this->action ?: '';
-			return true === $action ? $name : strtolower($name);
-		}
-	}
-
-	/**
-	 * 设置或者获取当前的语言
-	 * @access public
-	 * @param string $lang 语言名
-	 * @return string|Request
-	 */
-	public function langset($lang = null)
-	{
-		if (!is_null($lang)) {
-			$this->langset = $lang;
-			return $this;
-		} else {
-			return $this->langset ?: '';
-		}
+		return \Yaf\Dispatcher::getInstance()->getRequest()->getActionName();
 	}
 
 	/**
@@ -1327,107 +1227,10 @@ class Request
 		return $this->input;
 	}
 
-	/**
-	 * 生成请求令牌
-	 * @access public
-	 * @param string $name 令牌名称
-	 * @param mixed  $type 令牌生成方法
-	 * @return string
-	 */
-	public function token($name = '__token__', $type = 'md5')
-	{
-		$type  = is_callable($type) ? $type : 'md5';
-		$token = call_user_func($type, $_SERVER['REQUEST_TIME_FLOAT']);
-		if ($this->isAjax()) {
-			header($name . ': ' . $token);
-		}
-		Session::set($name, $token);
-		return $token;
-	}
 
-	/**
-	 * 设置当前地址的请求缓存
-	 * @access public
-	 * @param string $key 缓存标识，支持变量规则 ，例如 item/:name/:id
-	 * @param mixed  $expire 缓存有效期
-	 * @param array  $except 缓存排除
-	 * @param string $tag    缓存标签
-	 * @return void
-	 */
-	public function cache($key, $expire = null, $except = [], $tag = null)
-	{
-		if (!is_array($except)) {
-			$tag    = $except;
-			$except = [];
-		}
 
-		if (false !== $key && $this->isGet() && !$this->isCheckCache) {
-			// 标记请求缓存检查
-			$this->isCheckCache = true;
-			if (false === $expire) {
-				// 关闭当前缓存
-				return;
-			}
-			if ($key instanceof \Closure) {
-				$key = call_user_func_array($key, [$this]);
-			} elseif (true === $key) {
-				foreach ($except as $rule) {
-					if (0 === stripos($this->url(), $rule)) {
-						return;
-					}
-				}
-				// 自动缓存功能
-				$key = '__URL__';
-			} elseif (strpos($key, '|')) {
-				list($key, $fun) = explode('|', $key);
-			}
-			// 特殊规则替换
-			if (false !== strpos($key, '__')) {
-				$key = str_replace(['__MODULE__', '__CONTROLLER__', '__ACTION__', '__URL__', ''], [$this->module, $this->controller, $this->action, md5($this->url(true))], $key);
-			}
 
-			if (false !== strpos($key, ':')) {
-				$param = $this->param();
-				foreach ($param as $item => $val) {
-					if (is_string($val) && false !== strpos($key, ':' . $item)) {
-						$key = str_replace(':' . $item, $val, $key);
-					}
-				}
-			} elseif (strpos($key, ']')) {
-				if ('[' . $this->ext() . ']' == $key) {
-					// 缓存某个后缀的请求
-					$key = md5($this->url());
-				} else {
-					return;
-				}
-			}
-			if (isset($fun)) {
-				$key = $fun($key);
-			}
 
-			if (strtotime($this->server('HTTP_IF_MODIFIED_SINCE')) + $expire > $_SERVER['REQUEST_TIME']) {
-				// 读取缓存
-				$response = Response::create()->code(304);
-				throw new \think\exception\HttpResponseException($response);
-			} elseif (Cache::has($key)) {
-				list($content, $header) = Cache::get($key);
-				$response               = Response::create($content)->header($header);
-				throw new \think\exception\HttpResponseException($response);
-			} else {
-				$this->cache = [$key, $expire, $tag];
-			}
-		}
-	}
-
-	/**
-	 * 读取请求缓存设置
-	 * @access public
-	 * @return array
-	 */
-	public function getCache()
-	{
-		return $this->cache;
-	}
 
 	/**
 	 * 设置当前请求绑定的对象实例
