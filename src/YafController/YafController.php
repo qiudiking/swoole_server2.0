@@ -22,6 +22,7 @@ class YafController extends \Yaf\Controller_Abstract
 	/**
 	 * @var \AtServer\Client\Result
 	 */
+
 	protected $result;
 	
 	protected $sign = false;
@@ -127,7 +128,7 @@ class YafController extends \Yaf\Controller_Abstract
 	 * @return null
 	 * @throws \AtServer\Exception\ClientException
 	 */
-	protected function invokeCoroutine()
+	private function invokeCoroutine()
 	{
 		$params = func_get_args();
 		if($params){
@@ -135,4 +136,8 @@ class YafController extends \Yaf\Controller_Abstract
 			return  \AtServer\CoroutineClient\CoroutineClient::instance()->send($params);
 		}
 	}
+
+
+
+
 }

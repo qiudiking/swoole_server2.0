@@ -79,7 +79,7 @@ class {$className} extends MysqlEntity {
 	public function __construct( \$id = null ) {
 		\$this->_tableName = '{$tableName}';
 		";
-			if(isset(Config::load(getConfigPath())['mysql']['dbs'])){
+			if(Config::load(getConfigPath())->get('mysql.dbs',false)){
 				$str .= "\$this->_dbName = '{$dbName}';";
 			}else{
 				$str .= "\$this->_dbName =Config::load( getConfigPath() )['mysql']['db_name'];";

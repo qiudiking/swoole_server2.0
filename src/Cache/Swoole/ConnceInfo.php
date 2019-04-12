@@ -16,36 +16,37 @@ use AtServer\Log\Log;
 
 class ConnceInfo
 {
+	const _request_uri = 100;
+	const _cookie = 4096;
+	const _header = 8024;
+	const _server = 2048;
+	const _get = 1024;
+
 	protected static $field =[
-		[
-			'name'=>'uid',
-			'type' =>\swoole_table::TYPE_STRING,
-			'len'  => 30,
-		],
 		[
 			'name'=>'request_uri',
 			'type' =>\swoole_table::TYPE_STRING,
-			'len'  => 50,
+			'len'  => 100,
 		],
 		[
 			'name'=>'get',
 			'type'=>\swoole_table::TYPE_STRING,
-			'len' =>200,
+			'len' =>1024,
 		],
 		[
 			'name'=>'cookie',
 			'type'=> \swoole_table::TYPE_STRING,
-			'len' =>50,
+			'len' =>4096,
 		],
 		[
 			'name'=>'header',
 			'type'=>\swoole_table::TYPE_STRING,
-			'len'=>800,
+			'len'=>8024,
 		],
 		[
 			'name'=>'server',
 			'type'=>\swoole_table::TYPE_STRING,
-			'len' =>500
+			'len' =>2048
 		]
 	];
 
@@ -56,7 +57,8 @@ class ConnceInfo
 	 */
 	public static function create()
 	{
-		$table = new \swoole_table( 65536 );
+		exec('ulimit -n',$arr);
+		$table = new \swoole_table( $arr[0] );
 		foreach (self::$field as $item){
 			$table->column($item['name'],$item['type'] , $item['len']);       //1,2,4,8
 		}

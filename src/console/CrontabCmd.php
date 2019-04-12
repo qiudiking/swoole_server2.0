@@ -36,7 +36,7 @@ class CrontabCmd extends Command {
 	 */
 	public function execute( InputInterface $input, OutputInterface $output ) {
 		$extension = checkExtension();
-		$logPath = Config::load(getConfigPath())['log']['path'];
+		$logPath = Config::load(getConfigPath())->get('log.path',APPLICATION_PATH.'/bin/log');
 		Log::setPath($logPath);
 		$oi = new SymfonyStyle($input,$output);
 		if($extension !== true){

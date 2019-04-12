@@ -799,7 +799,7 @@ namespace Yaf
          *
          * @var array
          */
-        public $actions;
+	    public $actions;
 
         /**
          * (Yaf >= 2.2.9) 
@@ -810,7 +810,7 @@ namespace Yaf
          *
          * @var String
          */
-        protected $_module;
+	    public $_module;
 
         /**
          * (Yaf >= 2.2.9) 
@@ -818,7 +818,7 @@ namespace Yaf
          *
          * @var String
          */
-        protected $_name;
+	    public $_name;
 
         /**
          * (Yaf >= 2.2.9) 
@@ -829,7 +829,7 @@ namespace Yaf
          *
          * @var Request_Abstract
          */
-        protected $_request;
+	    private $_request;
 
         /**
          * (Yaf >= 2.2.9) 
@@ -840,7 +840,7 @@ namespace Yaf
          *
          * @var Response_Abstract
          */
-        protected $_response;
+	    private $_response;
 
         /**
          * (Yaf >= 2.2.9) 
@@ -851,7 +851,7 @@ namespace Yaf
          *
          * @var array
          */
-        protected $_invoke_args;
+	    public $_invoke_args;
 
         /**
          * (Yaf >= 2.2.9) 
@@ -862,7 +862,7 @@ namespace Yaf
          *
          * @var View_Interface
          */
-        protected $_view;
+	    public $_view;
 
         /**
          * (Yaf >= 2.2.9) 
@@ -892,7 +892,7 @@ namespace Yaf
          *
          * @return Request_Abstract
          */
-        public function getRequest(){}
+	    private function getRequest(){}
 
         /**
          * (Yaf >= 2.2.9) 
@@ -900,7 +900,7 @@ namespace Yaf
          *
          * @return Response_Abstract
          */
-        public function getResponse(){}
+	    private function getResponse(){}
 
         /**
          * (Yaf >= 2.2.9) 
@@ -908,7 +908,7 @@ namespace Yaf
          *
          * @return String
          */
-        public function getModuleName(){}
+	    private function getModuleName(){}
 
         /**
          * (Yaf >= 2.2.9) 
@@ -918,7 +918,7 @@ namespace Yaf
          *
          * @return Controller_Abstract
          */
-        public function initView(){}
+	    public function initView(){}
 
         /**
          * (Yaf >= 2.2.9)
@@ -926,7 +926,7 @@ namespace Yaf
          *
          * @return Yaf\View_Interface
          */
-        public function getView(){}
+	    public function getView(){}
 
         /**
          * (Yaf >= 2.2.9) 
@@ -936,7 +936,7 @@ namespace Yaf
          *
          * @return Boolean
          */
-        public function setViewPath($path){}
+	    public function setViewPath($path){}
 
         /**
          * (Yaf >= 2.2.9) 
@@ -944,7 +944,7 @@ namespace Yaf
          *
          * @return String
          */
-        public function getViewPath(){}
+	    public function getViewPath(){}
 
         /**
          * (Yaf >= 2.2.9) 
@@ -961,7 +961,7 @@ namespace Yaf
          *
          * @return Boolean
          */
-        public function forward($module, $controller = null, $action = null, $parameters = null){}
+	    public function forward($module, $controller = null, $action = null, $parameters = null){}
 
         /**
          * (Yaf >= 2.2.9) 
@@ -979,7 +979,7 @@ namespace Yaf
          *
          * @return Array
          */
-        public function getInvokeArgs(){}
+	    public function getInvokeArgs(){}
 
         /**
          * (Yaf >= 2.2.9) 
@@ -989,19 +989,19 @@ namespace Yaf
          *
          * @return mixed
          */
-        public function getInvokeArg($name){}
+	    public function getInvokeArg($name){}
 
         /**
          * (Yaf >= 2.2.9) 
          * 屏蔽构造方法
          */
-        final public function __construct(){}
+        final private function __construct(){}
 
         /**
          * (Yaf >= 2.2.9) 
          * 屏蔽克隆的魔术方法
          */
-        final public function __clone(){}
+        final private function __clone(){}
     }
 
     /**

@@ -74,7 +74,8 @@ class SwooleServer {
 
 	public function displayErrorHandler($errno, $errstr, $errfile, $errline)
 	{
-			Log::error($errno.$errstr. $errfile. $errline);
+		Log::log('===========================displayErrorHandler');
+		Log::error($errno.$errstr. $errfile. $errline);
 	}
 
 

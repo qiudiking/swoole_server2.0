@@ -42,7 +42,7 @@ class myRoute implements \Yaf\Route_Interface {
 			'',
 			'/',
 		], urldecode( $requestUri ) );
-		$prep = Config::load(getConfigPath())['route'];
+		$prep = Config::load(getConfigPath())->get('route',[]);
 		foreach ( $prep as $parent => $replace ) {
 			if ( preg_match( $parent, $requestUri ) ) {
 				$requestUri = preg_replace( $parent, $replace, $requestUri );

@@ -219,7 +219,7 @@ class PtPDO {
 	public function connect() {
 		try {
 			$this->PDOConnect = PDOConnect::instance();
-			$conf = Config::load(getConfigPath())['mysql'];
+			$conf = Config::load(getConfigPath())->get('mysql',[]);
 			if ( $this->PDOConnect->connect( $conf ) ) {
 				$this->table_prefix = $this->PDOConnect->getPrefix();
 				$this->setDbName( $this->getDbName() );

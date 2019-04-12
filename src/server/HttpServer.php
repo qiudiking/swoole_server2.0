@@ -109,6 +109,7 @@ class HttpServer extends SwooleServer {
 		}
 		isset( $_SERVER['HTTP_REQUEST_ID'] ) || $_SERVER['HTTP_REQUEST_ID'] = getRandChar( 28 );
 		CoroutineContent::put('response',$response);
+		CoroutineContent::put('request',$request);
 		$this->saveResponse($response);
 		if($_SERVER['REQUEST_URI'] == '/favicon.ico'){
 			$response->end('');
@@ -149,6 +150,7 @@ class HttpServer extends SwooleServer {
 
 		$result = ob_get_contents();
 		ob_end_clean();
+
 		if( !CoroutineContent::get('IS_RESPONSE') ){
 			$response->end($result);
 			$this->httpSendMessage();

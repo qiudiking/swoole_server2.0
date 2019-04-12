@@ -38,7 +38,7 @@ class MysqlFactoryBuilder {
 	 * 创建文件
 	 */
 	public static function createFile( $dbName, $_classFiles, $savePath = '' ) {
-		if( isset(Config::load(getConfigPath())['mysql']['dbs'] )){
+		if( Config::load(getConfigPath())->get('mysql.dbs',false) ){
 			$saveClassName = self::getClassName( $dbName ) . 'EntityFactory';
 		}else{
 			$saveClassName = 'DBEntityFactory';

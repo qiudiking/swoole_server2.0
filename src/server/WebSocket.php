@@ -13,6 +13,7 @@ use AtServer\Client\Result;
 use AtServer\Client\sendMessage;
 use AtServer\Client\WsMessageBase;
 use AtServer\Client\WsResult;
+use AtServer\Exception\ThrowException;
 use AtServer\Log\Log;
 use AtServer\Cache\Swoole\ConnceInfo;
 use function PHPSTORM_META\type;
@@ -37,6 +38,9 @@ class WebSocket extends HttpServer
 	 */
 	public  function onHandshake(\swoole_http_request $request, \swoole_http_response $response) {
 		$this->globalvalue($request);
+		if(isset($request->get['cookie'])){
+			$_COOKIE = array_merge(json_decode($request->get['cookie'],true),$_COOKIE);
+		}
 		if($this->handshake($request,$response) === false){
 			$response->end();
 			return false;
@@ -117,13 +121,16 @@ class WebSocket extends HttpServer
 	public function onMessage(\swoole_websocket_server $server, \Swoole\WebSocket\Frame $frame)
 	{
 		try{
-			$data = json_decode($frame->data);
-			if($data->message_router == $this->heartbeat){
-				Log::log('心跳检测');
+			$data = json_decode($frame->data,true);
+			if($data['message_router'] == $this->heartbeat){
+				//Log::log('心跳检测');
 				return true;
 			}
 			$connceInfo = ConnceInfo::get($frame->fd);
 			$this->globalvalue($connceInfo);
+			if(isset($data['cookie'])){
+			    $_COOKIE = array_merge( $data['cookie'],$_COOKIE );
+			}
 			$class = $connceInfo['request_uri'];
 			$instance = new $class();
 			if(method_exists($instance,'message')){
@@ -132,10 +139,10 @@ class WebSocket extends HttpServer
 					if(is_null($data)){
 					    throw new \Exception('发送的数据必须为json数据');
 					}
-					if(!$data->message_router){
+					if(isset($data['message_router']) === false){
 					  throw new \Exception('message路由不能为空');
 					}
-					$router = $this->messageRouter($class,$data->message_router);
+					$router = $this->messageRouter($class,$data['message_router']);
 				    if(isset($router['Controoler'])){
 				    	if(!isset($router['Action'])){
 						    throw new \Exception('Action不能为空');
@@ -278,9 +285,26 @@ class WebSocket extends HttpServer
 			}
 			$get =$request->get?json_encode($request->get): '';
 			$cookie = $request->cookie?json_encode($request->cookie) :'';
+			$header = json_encode($request->header);
+			$server = json_encode($request->server);
+			if(strlen($get) >ConnceInfo::_get){
+			    ThrowException::SystemException(33341,'GET参数长度超出');
+			}
+			if(strlen($cookie) >ConnceInfo::_cookie){
+				ThrowException::SystemException(33341,'COOKIE长度超出');
+			}
+			if(strlen($header) >ConnceInfo::_header){
+				ThrowException::SystemException(33341,'HEADER长度超出');
+			}
+			if(strlen($server) >ConnceInfo::_server){
+				ThrowException::SystemException(33341,'SERVER长度超出');
+			}
+			if(strlen($class) >ConnceInfo::_request_uri){
+				ThrowException::SystemException(33341,'URI长度超出');
+			}
 			$clientDdata = [
-				'header'=>json_encode($request->header),
-				'server'=>json_encode($request->server),
+				'header'=>$header,
+				'server'=>$server,
 				'get' =>$get,
 				'cookie'=>$cookie,
 				'request_uri' =>$class,

@@ -78,7 +78,7 @@ class RedisCache implements CacheInterface {
 				$config = $host;
 				$host   = null;
 			} else {
-				$config = Config::load(getConfigPath())['redis'];
+				$config = Config::load(getConfigPath())->get('redis',[]);
 			}
 			if ( ! $config ) {
 				return false;
