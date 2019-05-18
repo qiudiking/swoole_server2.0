@@ -135,7 +135,6 @@ class HttpServer extends SwooleServer {
 			//echo 'success';
 		} catch ( \AtServer\Exception\RedirectException $redirectException ) {
 			//301控制器
-			Log::warning('301重定向跳转');
 			$result_i->set('url',$redirectException->getRedirect_url());
 			$result_i->setCodeMsg($redirectException->getMessage(),$redirectException->getCode());
 			echo $result_i;
@@ -143,7 +142,7 @@ class HttpServer extends SwooleServer {
 				CoroutineContent::put('IS_RESPONSE',1);
 			}
 			$this->httpSendMessage();
-		} catch ( \Exception $e ) {
+		} catch ( \Throwable $e ) {
 			Log::error('code=' . $e->getCode() . ' : ' . $e->getMessage() . $e->getTraceAsString() );
 			$result_i->setCodeMsg($e->getMessage(),$e->getCode());
 			if(!isAjaxRequest()){

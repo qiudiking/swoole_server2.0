@@ -72,7 +72,7 @@ class ActionSuccessException extends \Exception
 	 * @param null $url
 	 * @param int  $time
 	 *
-	 * @throws \AtServer\ActionSuccessException
+	 * @throws \AtServer\Exception\ActionSuccessException
 	 */
     static function success( $message , $url=null , $time=0 )
     {

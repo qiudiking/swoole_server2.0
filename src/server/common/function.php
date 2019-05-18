@@ -1,4 +1,7 @@
 <?php
+
+use AtServer\Log\Log;
+
 function checkExtension()
 {
 	if (!extension_loaded('swoole')) {
@@ -62,7 +65,7 @@ function getConfigPath(){
 
 
 function displayExceptionHandler(){
-	echo 'set_exception_handler';
+	Log::log( 'set_exception_handler');
 }
 
 /**

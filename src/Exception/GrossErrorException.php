@@ -26,7 +26,6 @@ class GrossErrorException extends \Exception{
 	 */
 	public function __construct($code,$msg='') {
 		$msg || $msg = ErrorHandler::getErrMsg( $code );
-		Log::error( '严重错误:msg=' . $msg . ' ; code=' . $code );
 		parent::__construct( $msg, $code );
 
 	}

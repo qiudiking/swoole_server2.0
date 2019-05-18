@@ -27,7 +27,7 @@ class FieldVerifyException extends \Exception
 	/**
 	 * @param $msg
 	 *
-	 * @throws \AtServer\FieldVerifyException
+	 * @throws \AtServer\Exception\FieldVerifyException
 	 */
 	static function throwException($msg)
 	{

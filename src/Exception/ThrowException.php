@@ -7,7 +7,6 @@
  */
 
 namespace AtServer\Exception;
-use AtServer\Log\Log;
 
 /**
  * 快速抛出异常
@@ -21,7 +20,7 @@ class ThrowException
 	 * @param        $code
 	 * @param string $msg
 	 *
-	 * @throws \AtServer\DBException
+	 * @throws \AtServer\Exception\DBException
 	 */
     public static function DBException( $code , $msg ='')
     {
@@ -33,11 +32,10 @@ class ThrowException
 	 * @param        $code
 	 * @param string $msg
 	 *
-	 * @throws \AtServer\OrderException
+	 * @throws \AtServer\Exception\OrderException
 	 */
     public static function OrderException($code,$msg='')
     {
-        Log::error( '订单异常:msg=' . $msg . ' ; code=' . $code );
         throw new OrderException(  $msg ,$code);
     }
 
@@ -46,7 +44,7 @@ class ThrowException
 	 * @param        $code
 	 * @param string $msg
 	 *
-	 * @throws \AtServer\SignException
+	 * @throws \AtServer\Exception\SignException
 	 */
 	public static function SignException( $code, $msg = '' ) {
 		$msg || $msg = ErrorHandler::getErrMsg( $code );
@@ -58,7 +56,7 @@ class ThrowException
 	 * @param        $code
 	 * @param string $msg
 	 *
-	 * @throws \AtServer\MessageException
+	 * @throws \AtServer\Exception\MessageException
 	 */
     public static function MessageException( $code, $msg = '' ) {
             $msg || $msg = ErrorHandler::getErrMsg( $code );
@@ -70,48 +68,45 @@ class ThrowException
 	 * @param        $code
 	 * @param string $msg
 	 *
-	 * @throws \AtServer\ProvideException
+	 * @throws \AtServer\Exception\ProvideException
 	 */
     public static function ProvideException($code,$msg='')
     {
 	    $msg || $msg = ErrorHandler::getErrMsg( $code );
-	    Log::error( '系统异常:msg=' . $msg . ' ; code=' . $code );
         throw new ProvideException( $code , $msg );
     }
 
 	/**
-	 *  抛出系统异常
+	 * 抛出系统异常
 	 * @param        $code
 	 * @param string $msg
 	 *
-	 * @throws \AtServer\SystemException
+	 * @throws \AtServer\Exception\SystemException
 	 */
     public static function SystemException( $code , $msg = '' )
     {
         $msg || $msg = ErrorHandler::getErrMsg( $code );
-        Log::error( '系统异常:msg=' . $msg . ' ; code=' . $code );
         throw new SystemException( $code , $msg );
     }
 
 	/**
+	 *
 	 * @param        $code
 	 * @param string $msg
 	 *
-	 * @throws \AtServer\MongodbException
+	 * @throws \AtServer\Exception\MongodbException
 	 */
     public static function MongodbException( $code , $msg ='')
     {
         $msg || $msg = ErrorHandler::getErrMsg( $code );
-        Log::error( 'mongodb异常:msg=' . $msg . ' ; code=' . $code );
         throw new MongodbException( $code , $msg );
     }
 
 	/**
-	 * 严重错误并通知
 	 * @param        $code
 	 * @param string $msg
 	 *
-	 * @throws \AtServer\GrossErrorException
+	 * @throws \AtServer\Exception\GrossErrorException
 	 */
 	public static function GrossErrorException($code,$msg=''){
 		throw new GrossErrorException( $code , $msg );

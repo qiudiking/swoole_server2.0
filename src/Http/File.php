@@ -447,22 +447,7 @@ class File extends SplFileObject
         return $this;
     }
 
-    /**
-     * 获取错误信息（支持多语言）
-     * @access public
-     * @return string
-     */
-    public function getError()
-    {
-        if (is_array($this->error)) {
-            list($msg, $vars) = $this->error;
-        } else {
-            $msg  = $this->error;
-            $vars = [];
-        }
 
-        return Lang::has($msg) ? Lang::get($msg, $vars) : $msg;
-    }
 
     /**
      * 魔法方法，获取文件的 hash 值

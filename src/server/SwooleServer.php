@@ -251,11 +251,14 @@ class SwooleServer {
 		$config = $this->config['ports'][$this->serverName];
 		$processInfo = $this->get_process_info();
 		if ( $processInfo ) {
-			$name = $processInfo['name'];
 			$pid  = $processInfo['pid'];
 			if ( $pid ) {
 				\swoole_process::kill( $pid );
-				file_put_contents( APPLICATION_PATH.'/bin/pidfile/'.$this->serverName.$config['socket_port'].'.pid', $pid );
+				$path = APPLICATION_PATH.'/bin/pidfile/';
+				if(!is_dir( $path )){
+					create( $path );
+				}
+				file_put_contents( $path.$this->serverName.$config['socket_port'].'.pid', $pid );
 				$oi->success($this->serverName.'服务关闭成功 端口:'.$config['socket_port']);
 			} else {
 				$oi->error($this->serverName.'服务关闭失败 端口:'.$config['socket_port']);
